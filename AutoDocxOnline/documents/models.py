@@ -1,18 +1,19 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from utils import user_documents_directory_path
 
 User = get_user_model()
 
 
 class Document(models.Model):
     name = models.CharField(max_length=100, verbose_name='file_title')
-    file = models.FileField(upload_to='documents/')
     owner = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='documents',
         verbose_name="document_author",
     )
+    file = models.FileField(upload_to=user_documents_directory_path)
 
     class Meta:
         ordering = ['name']
