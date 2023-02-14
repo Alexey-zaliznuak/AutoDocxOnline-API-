@@ -121,4 +121,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# File Storage
+media/
+
 test.py
