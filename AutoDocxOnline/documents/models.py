@@ -17,7 +17,7 @@ class Document(models.Model):
 
     class Meta:
         ordering = ['name']
-    
+
     def __str__(self) -> str:
         return str(self.file.name)
 
