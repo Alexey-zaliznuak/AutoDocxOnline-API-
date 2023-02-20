@@ -1,3 +1,4 @@
+from datetime import timedelta
 from dotenv import load_dotenv
 from pathlib import Path
 import os
@@ -94,6 +95,13 @@ SWAGGER_SETTINGS = {
         }
     }
 }
+
+SIMPLE_JWT = {
+    # Устанавливаем срок жизни токена
+   'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+   'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
