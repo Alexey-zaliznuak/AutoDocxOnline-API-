@@ -17,4 +17,17 @@ class IsOwnerOrReadOnlyPermission(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        return obj.owner == request.user 
+        return obj.owner == request.user
+
+
+class IsAuthorOrObjIsPublic(permissions.BasePermission):
+    """
+    Work with models with field 'public'.
+    return True if user is owner or document is public.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        return (
+            obj.owner == request.user
+            or obj.public
+        )

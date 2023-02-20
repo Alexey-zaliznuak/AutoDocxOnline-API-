@@ -10,6 +10,7 @@ from drf_yasg import openapi
 from api.views import (
     DocumentViewSet,
     DocumentsPackageViewSet,
+    upload,
 )
 
 v1_router = Router()
@@ -18,6 +19,11 @@ v1_router.register(
     'documents_package',
     DocumentsPackageViewSet,
     basename='documents_package',
+)
+v1_router.register(
+    r'load/(?P<document_id>\d+)',
+    upload,
+    basename='upload'
 )
 
 urlpatterns = [

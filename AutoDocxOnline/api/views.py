@@ -1,8 +1,9 @@
 from documents.models import Document
 from rest_framework import viewsets
+from rest_framework.decorators import api_view, permission_classes
 
 from .serializers import DocumentSerializer, DocumentsPackageSerializer
-from .permissions import IsOwnerOrReadOnlyPermission
+from .permissions import IsOwnerOrReadOnlyPermission, IsAuthorOrObjIsPublic
 
 from documents.models import Document, DocumentsPackage
 
@@ -30,3 +31,9 @@ class DocumentsPackageViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+
+@api_view
+@permission_classes((IsAuthorOrObjIsPublic, ))
+def upload(request, document_id):
+    pass
