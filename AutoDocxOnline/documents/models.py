@@ -8,7 +8,15 @@ class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
 
-class Document(models.Model):
+class PublicModel(models.Model):
+    #This field use in IsOwnerOrObjIsPublic permission
+    public = models.BooleanField(verbose_name="is public")
+
+    class Meta:
+        abstract = True
+
+
+class Document(PublicModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100, verbose_name='file_title')
     owner = models.ForeignKey(
@@ -26,7 +34,7 @@ class Document(models.Model):
         return str(self.file.name)
 
 
-class DocumentsPackage(models.Model):
+class DocumentsPackage(PublicModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100, verbose_name='package_name')
     documents = models.ManyToManyField(Document, verbose_name="documents")
