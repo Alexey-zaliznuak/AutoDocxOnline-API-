@@ -25,7 +25,11 @@ class Document(PublicModel):
         related_name='documents',
         verbose_name="document_author",
     )
-    file = models.FileField(upload_to=user_documents_directory_path)
+    file = models.FileField(
+        upload_to=user_documents_directory_path,
+        null=False,
+        blank=False,
+    )
 
     class Meta:
         ordering = ['name']
