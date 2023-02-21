@@ -20,7 +20,7 @@ class IsOwnerOrReadOnlyPermission(permissions.BasePermission):
         return obj.owner == request.user
 
 
-class IsAuthorOrObjIsPublic(permissions.BasePermission):
+class IsOwnerOrObjIsPublic(permissions.BasePermission):
     """
     Work with models with field 'public'.
     return True if user is owner or document is public.

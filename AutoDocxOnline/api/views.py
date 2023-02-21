@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
 
 from .serializers import DocumentSerializer, DocumentsPackageSerializer
-from .permissions import IsOwnerOrReadOnlyPermission, IsAuthorOrObjIsPublic
+from .permissions import IsOwnerOrReadOnlyPermission, IsOwnerOrObjIsPublic
 
 from documents.models import Document, DocumentsPackage
 
@@ -34,6 +34,6 @@ class DocumentsPackageViewSet(viewsets.ModelViewSet):
 
 
 @api_view
-@permission_classes((IsAuthorOrObjIsPublic, ))
+@permission_classes((IsOwnerOrObjIsPublic, ))
 def upload(request, document_id):
     pass
