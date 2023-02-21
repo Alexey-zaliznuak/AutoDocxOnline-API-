@@ -20,17 +20,15 @@ v1_router.register(
     DocumentsPackageViewSet,
     basename='documents_package',
 )
-v1_router.register(
-    r'load/(?P<document_id>\d+)',
-    upload,
-    basename='upload'
-)
+
 
 urlpatterns = [
     path('v1/', include(v1_router.urls)),
     path('v1/', include('djoser.urls')),
     path('v1/', include('djoser.urls.jwt')),
+    path('upload/<uuid:document_id>/', upload, name='upload')
 ]
+
 
 schema_view = get_schema_view(
    openapi.Info(
