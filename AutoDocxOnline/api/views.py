@@ -42,5 +42,7 @@ class DocumentsPackageViewSet(viewsets.ModelViewSet):
 @api_view
 @permission_classes((IsOwnerOrObjIsPublic, ))
 def upload(request, document_id):
-    # response = FileResponse(open('myfile.png', 'rb'))
-    pass
+    document = Document.objects.get(pk=document_id)
+    response = FileResponse(open(document.file, 'rb'))
+
+    return response
