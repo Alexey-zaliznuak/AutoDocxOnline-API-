@@ -10,7 +10,7 @@ class User(AbstractUser):
 
 class PublicModel(models.Model):
     #This field use in IsOwnerOrObjIsPublic permission
-    public = models.BooleanField(verbose_name="is public")
+    public = models.BooleanField(verbose_name="is public", default=False)
 
     class Meta:
         abstract = True
