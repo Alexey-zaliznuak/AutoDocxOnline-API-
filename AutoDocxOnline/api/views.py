@@ -1,4 +1,6 @@
 from documents.models import Document
+from django.http import FileResponse
+
 from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
 
@@ -13,7 +15,8 @@ class DocumentViewSet(viewsets.ModelViewSet):
     permission_classes = (IsOwnerOrReadOnlyPermission,)
 
     def get_queryset(self):
-        if self.request.user.id: # protect “AnonymousUser” is not a valid UUID
+        # protect “AnonymousUser” is not a valid UUID
+        if not self.request.user.is_anonymous:
             new_queryset = Document.objects.filter(owner=self.request.user)
             return new_queryset
 
@@ -27,7 +30,8 @@ class DocumentsPackageViewSet(viewsets.ModelViewSet):
     permission_classes = (IsOwnerOrReadOnlyPermission,)
 
     def get_queryset(self):
-        if self.request.user.id: # protect “AnonymousUser” is not a valid UUID
+        # protect “AnonymousUser” is not a valid UUID
+        if not self.request.user.is_anonymous:
             new_queryset = DocumentsPackage.objects.filter(owner=self.request.user)
             return new_queryset
 
@@ -38,4 +42,5 @@ class DocumentsPackageViewSet(viewsets.ModelViewSet):
 @api_view
 @permission_classes((IsOwnerOrObjIsPublic, ))
 def upload(request, document_id):
+    # response = FileResponse(open('myfile.png', 'rb'))
     pass
