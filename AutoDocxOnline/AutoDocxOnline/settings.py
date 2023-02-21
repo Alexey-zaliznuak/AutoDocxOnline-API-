@@ -50,6 +50,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'AutoDocxOnline.urls'
+AUTH_USER_MODEL = 'documents.User'
 
 TEMPLATES = [
     {

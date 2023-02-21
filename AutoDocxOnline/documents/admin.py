@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Document, DocumentsPackage
-
+from .models import Document, DocumentsPackage, User
 
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
@@ -13,3 +12,6 @@ class DocumentAdmin(admin.ModelAdmin):
     search_fields = ('name', 'file')
     list_filter = ('name',)
     empty_value_display = '-пусто-'
+
+
+admin.site.register(User)

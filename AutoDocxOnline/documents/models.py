@@ -1,11 +1,15 @@
+import uuid
 from django.db import models
-from django.contrib.auth import get_user_model
 from utils import user_documents_directory_path
+from django.contrib.auth.models import AbstractUser, User
 
-User = get_user_model()
+
+class User(AbstractUser):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
 
 class Document(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100, verbose_name='file_title')
     owner = models.ForeignKey(
         User,
@@ -23,6 +27,7 @@ class Document(models.Model):
 
 
 class DocumentsPackage(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100, verbose_name='package_name')
     documents = models.ManyToManyField(Document, verbose_name="documents")
     owner = models.ForeignKey(
