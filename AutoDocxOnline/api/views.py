@@ -1,8 +1,9 @@
 from documents.models import Document
 from django.http import FileResponse
 
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
 
 from .serializers import DocumentSerializer, DocumentsPackageSerializer
 from .permissions import IsOwnerOrReadOnlyPermission, IsOwnerOrObjIsPublic
@@ -39,10 +40,11 @@ class DocumentsPackageViewSet(viewsets.ModelViewSet):
         serializer.save(owner=self.request.user)
 
 
-@api_view
-@permission_classes((IsOwnerOrObjIsPublic, ))
 def upload(request, document_id):
     document = Document.objects.get(pk=document_id)
-    response = FileResponse(open(document.file, 'rb'))
+    if not document.public:
+        if request.user != document.owner:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+    response = FileResponse(open(document.file.path, 'rb'))
 
     return response
