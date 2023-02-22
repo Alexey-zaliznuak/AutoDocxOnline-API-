@@ -8,6 +8,10 @@ from rest_framework.response import Response
 from .serializers import DocumentSerializer, DocumentsPackageSerializer
 from .permissions import IsOwnerOrReadOnlyPermission, IsOwnerOrObjIsPublic
 
+from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
+
+
 from documents.models import Document, DocumentsPackage
 
 
@@ -40,11 +44,14 @@ class DocumentsPackageViewSet(viewsets.ModelViewSet):
         serializer.save(owner=self.request.user)
 
 
+@api_view(('GET',))
+@renderer_classes((JSONRenderer,))
 def upload(request, document_id):
+    context_400 = {"Access denied": "document is private"}
     document = Document.objects.get(pk=document_id)
-    if not document.public:
-        if request.user != document.owner:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-    response = FileResponse(open(document.file.path, 'rb'))
 
+    if not document.public and request.user != document.owner:
+        return Response(context_400, status=status.HTTP_400_BAD_REQUEST)
+
+    response = FileResponse(open(document.file.path, 'rb'))
     return response
