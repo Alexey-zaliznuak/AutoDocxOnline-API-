@@ -2,28 +2,29 @@ from documents.models import Document
 from django.http import FileResponse
 
 from rest_framework import viewsets, status
-from rest_framework.views import APIView
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
 
 from .serializers import DocumentSerializer, DocumentsPackageSerializer
 from .permissions import IsOwnerOrReadOnlyPermission, IsOwnerOrObjIsPublic
 
+from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
+from rest_framework.permissions import IsAuthenticated
 
 from documents.models import Document, DocumentsPackage
 
 
 class DocumentViewSet(viewsets.ModelViewSet):
     serializer_class = DocumentSerializer
-    permission_classes = (IsOwnerOrReadOnlyPermission,)
+    permission_classes = (IsAuthenticated, IsOwnerOrReadOnlyPermission,)
 
-    @action(detail=True, methods=["get"], url_name='download_document')
+    @action(detail=True, methods=["get"], url_name='download_document', permission_classes=())
     def download(self, request, pk):
         context_400 = {"Access denied": "document is private"}
         document = Document.objects.get(pk=pk)
 
+        print(document.public)
+        print(request.user, document.owner)
         if not document.public and request.user != document.owner:
             return Response(context_400, status=status.HTTP_400_BAD_REQUEST)
 

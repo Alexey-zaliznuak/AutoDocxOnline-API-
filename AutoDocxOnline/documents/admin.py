@@ -33,7 +33,7 @@ class DocumentAdmin(admin.ModelAdmin):
     list_filter = ('name',)
     empty_value_display = '-пусто-'
 
-    @admin.display(empty_value='unknown', description="download_path")
+    @admin.display(empty_value='unknown', description="download_url")
     def file_path(self, obj):
         return reverse(
             'documents-download_document',
