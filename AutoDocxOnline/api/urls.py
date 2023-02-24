@@ -10,7 +10,6 @@ from drf_yasg import openapi
 from api.views import (
     DocumentViewSet,
     DocumentsPackageViewSet,
-    upload,
 )
 
 v1_router = Router()
@@ -21,14 +20,11 @@ v1_router.register(
     basename='documents_package',
 )
 
-
 urlpatterns = [
     path('v1/', include(v1_router.urls)),
     path('v1/', include('djoser.urls')),
     path('v1/', include('djoser.urls.jwt')),
-    path('v1/upload/<uuid:document_id>/', upload, name='upload'),
 ]
-
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -36,7 +32,7 @@ schema_view = get_schema_view(
       default_version='v1',
       description="Документация для приложения documents",
       # terms_of_service="URL страницы с пользовательским соглашением",
-      contact=openapi.Contact(email="admin@kittygram.ru"),
+      contact=openapi.Contact(email="zaliznuak50@gmail.com"),
       license=openapi.License(name="BSD License"),
    ),
 

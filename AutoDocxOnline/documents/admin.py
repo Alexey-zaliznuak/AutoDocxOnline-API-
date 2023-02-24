@@ -16,7 +16,7 @@ class MyUserAdmin(UserAdmin):
     form = MyUserChangeForm
 
     fieldsets = UserAdmin.fieldsets + (
-            (None, {'fields': ()}),
+        (None, {'fields': ()}),
     )
 
 
@@ -33,10 +33,10 @@ class DocumentAdmin(admin.ModelAdmin):
     list_filter = ('name',)
     empty_value_display = '-пусто-'
 
-    @admin.display(empty_value='unknown', description="load_path")
+    @admin.display(empty_value='unknown', description="download_path")
     def file_path(self, obj):
         return reverse(
-            'upload',
+            'documents-download_document',
                 args=(
                 obj.pk,
             )

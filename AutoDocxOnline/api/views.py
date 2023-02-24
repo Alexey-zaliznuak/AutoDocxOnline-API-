@@ -2,15 +2,15 @@ from documents.models import Document
 from django.http import FileResponse
 
 from rest_framework import viewsets, status
+from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from .serializers import DocumentSerializer, DocumentsPackageSerializer
 from .permissions import IsOwnerOrReadOnlyPermission, IsOwnerOrObjIsPublic
 
-from rest_framework.decorators import api_view, renderer_classes
-from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
-
+from rest_framework.decorators import action
+from rest_framework.renderers import JSONRenderer
 
 from documents.models import Document, DocumentsPackage
 
@@ -18,6 +18,17 @@ from documents.models import Document, DocumentsPackage
 class DocumentViewSet(viewsets.ModelViewSet):
     serializer_class = DocumentSerializer
     permission_classes = (IsOwnerOrReadOnlyPermission,)
+
+    @action(detail=True, methods=["get"], url_name='download_document')
+    def download(self, request, pk):
+        context_400 = {"Access denied": "document is private"}
+        document = Document.objects.get(pk=pk)
+
+        if not document.public and request.user != document.owner:
+            return Response(context_400, status=status.HTTP_400_BAD_REQUEST)
+
+        response = FileResponse(open(document.file.path, 'rb'))
+        return response
 
     def get_queryset(self):
         # protect “AnonymousUser” is not a valid UUID
@@ -42,16 +53,3 @@ class DocumentsPackageViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
-
-
-@api_view(('GET',))
-@renderer_classes((JSONRenderer,))
-def upload(request, document_id):
-    context_400 = {"Access denied": "document is private"}
-    document = Document.objects.get(pk=document_id)
-
-    if not document.public and request.user != document.owner:
-        return Response(context_400, status=status.HTTP_400_BAD_REQUEST)
-
-    response = FileResponse(open(document.file.path, 'rb'))
-    return response
