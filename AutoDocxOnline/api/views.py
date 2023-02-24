@@ -23,8 +23,6 @@ class DocumentViewSet(viewsets.ModelViewSet):
         context_400 = {"Access denied": "document is private"}
         document = Document.objects.get(pk=pk)
 
-        print(document.public)
-        print(request.user, document.owner)
         if not document.public and request.user != document.owner:
             return Response(context_400, status=status.HTTP_400_BAD_REQUEST)
 
