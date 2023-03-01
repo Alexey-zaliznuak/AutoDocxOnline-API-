@@ -3,11 +3,10 @@ from dotenv import load_dotenv
 from pathlib import Path
 import os
 
-from django.http import response
-
-DEBUG = True
 
 load_dotenv()
+
+DEBUG = True
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -18,7 +17,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -82,7 +81,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_THROTTLE_RATES': {
         'user': '1000/day',
-        'anon': '10/day',
+        'anon': '1000/day',
     }
 }
 
@@ -106,7 +105,7 @@ SIMPLE_JWT = {
 
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
+    'http://localhost:3001',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = False
